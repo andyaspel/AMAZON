@@ -2,16 +2,25 @@
   "name": "server",
   "version": "1.0.0",
   "description": "tutorial copy of amazon webpage",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["tutorial", "express", "vue", "node", "html", "css"],
+  "keywords": [
+    "tutorial",
+    "express",
+    "vue",
+    "node",
+    "html",
+    "css"
+  ],
   "author": "andy",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "mongoose": "^5.9.3",
     "morgan": "^1.9.1"
   }
 }
