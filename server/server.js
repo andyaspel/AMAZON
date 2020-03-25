@@ -1,66 +1,42 @@
 // node modules
-const dotenv = require('dotenv');
-const express = require('express');
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+const dotenv = require("dotenv");
+const express = require("express");
+const morgan = require("morgan");
+const bodyParser = require("body-parser");
+const cors = require("cors");
 
 // imported modules
-const User = require('./models/user');
-// local variables
+const connectDB = require("./src/config/db");
+const productRoutes = require("./src/routes/product");
+const categoryRoutes = require("./src/routes/category");
+const ownerRoutes = require("./src/routes/owner");
 
-// iniate dotenv
 dotenv.config();
 
 // initiate express module
 const app = express();
 
-// initate mongoDB
-mongoose.connect(process.env.DATABASE,
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useCreateIndex: true
-    },
-    err => {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log("Connected to database");
-        }
-    });
-
 // middleware used by express
-app.use(morgan('dev'));
+// set cors headers
+app.use(cors());
+// set logger
+app.use(morgan("dev"));
+// parse body
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(__dirname + '/admin/assets'));
+// Connect Database
+connectDB();
+// ROUTES
+app.use("/api", productRoutes);
+app.use("/api", categoryRoutes);
+app.use("/api", ownerRoutes);
 
-// GET - fetch data from server
-app.get("/", (req, res) => {
-    res.json("Hello amazon clone");
-});
-
-// POST - send data to server
-app.post("/", (req, res) => {
-    let user = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password
-    }
-    );
-    user.save((err) => {
-        if (err) {
-            res.json(err);
-        } else {
-            res.json("success new user saved");
-        }
-    });
-});
 // START - server on localhost port:3000
 app.listen(process.env.PORT, err => {
-    if (err) {
-        console.log(err);
-    } else {
-        console.log("server is listening on port 3000");
-    }
+  if (err) {
+    console.log(err);
+  } else {
+    console.log("server is listening on port 3000");
+  }
 });
